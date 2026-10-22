@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mis 18 Años - Alvaro</title>
+  
+  <!-- Metas para compartir en WhatsApp y Redes Sociales -->
+  <meta property="og:title" content="¡Festejamos mis 18! - Alvaro ⚡">
+  <meta property="og:description" content="Estás invitado a una noche inolvidable. Entrá para ver todos los detalles y confirmar tu lugar.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0d0f14">
+
+  <!-- Google Fonts: Syne (moderno, canchero, display), Montserrat & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@300;400;500;600;700;800;900&family=Syne:wght@600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Fondo dinámico interactivo con Canvas -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- PANTALLA DE INGRESO / VIP PASS (Garantiza reproducción de audio en todos los celulares) -->
+  <div id="welcome-overlay" class="welcome-overlay" role="dialog" aria-modal="true" aria-label="Pantalla de bienvenida">
+    <div class="welcome-box">
+      <div class="vip-badge">
+        <i class="fa-solid fa-bolt"></i> VIP ACCESS
+      </div>
+      <p class="welcome-subtitle">ESTÁS INVITADO AL FESTEJO DE LOS</p>
+      <div class="welcome-number-wrap">
+        <span class="welcome-number">18</span>
+      </div>
+      <h1 class="welcome-name">ALVARO</h1>
+      <div class="welcome-line"></div>
+      <p class="welcome-hint"><i class="fa-solid fa-volume-high"></i> Activá el sonido para la mejor experiencia</p>
+      
+      <button id="btn-enter" class="btn-primary pulse-btn" type="button">
+        <i class="fa-solid fa-ticket"></i> INGRESAR A LA FIESTA
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTROL FLOTANTE DE MÚSICA -->
+  <aside class="music-controller" id="music-controller" aria-label="Reproductor de música">
+    <button id="btn-music-toggle" class="btn-music" type="button" title="Pausar / Reproducir música" aria-label="Control de música">
+      <div class="equalizer-bars" id="equalizer" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <i class="fa-solid fa-music music-icon" aria-hidden="true"></i>
+    </button>
+    <div class="music-tooltip" id="music-tooltip">
+      <span class="track-status">Reproduciendo</span>
+      <span class="track-title" id="track-title-text">Música de la fiesta</span>
+    </div>
+  </aside>
+
+  <!-- ELEMENTO DE AUDIO (Carga la canción colocada en la carpeta) -->
+  <audio id="bg-audio" loop preload="auto">
+    <source src="DobleP - Me Escap%C3%A9.mp3" type="audio/mpeg">
+    <source src="DobleP - Me Escapé.mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
+  </audio>
+
+  <!-- CONTENIDO PRINCIPAL DE LA INVITACIÓN -->
+  <main class="invitation-container" id="main-content">
+    
+    <!-- SECCIÓN HERO / PORTADA -->
+    <header class="section hero-section">
+      <div class="hero-tag">
+        <span class="tag-glow">#ALVARO18</span>
+      </div>
+
+      <span class="eyebrow-text">MIS DIECIOCHO AÑOS</span>
+      <h1 class="main-title">ALVARO</h1>
+      
+      <div class="neon-divider" aria-hidden="true">
+        <span></span>
+        <i class="fa-solid fa-bolt-lightning"></i>
+        <span></span>
+      </div>
+
+      <p class="hero-quote">
+        "Llegó el momento de festejarlo a lo grande. Preparate para una noche épica."
+      </p>
+
+      <!-- FECHA DESTACADA -->
+      <div class="date-hero-card">
+        <div class="date-col">
+          <span class="date-weekday" id="display-weekday">DOMINGO</span>
+          <span class="date-big" id="display-day">06</span>
+          <span class="date-month" id="display-month">DICIEMBRE</span>
+        </div>
+        <div class="date-sep" aria-hidden="true"></div>
+        <div class="date-info">
+          <div class="date-time-item">
+            <i class="fa-regular fa-clock"></i>
+            <div>
+              <span class="time-label">HORARIO</span>
+              <span class="time-val" id="display-time">21:30 A 06:00 HS</span>
+            </div>
+          </div>
+          <div class="date-time-item">
+            <i class="fa-solid fa-champagne-glasses"></i>
+            <div>
+              <span class="time-label">MODO</span>
+              <span class="time-val">Fiesta toda la noche</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- SECCIÓN CUENTA REGRESIVA -->
+    <section class="section countdown-section reveal-on-scroll" aria-label="Cuenta regresiva">
+      <h2 class="section-subtitle">FALTAN TAN SOLO</h2>
+      
+      <div class="countdown-grid" id="countdown-timer">
+        <div class="time-card">
+          <span class="time-number" id="days">00</span>
+          <span class="time-unit">DÍAS</span>
+        </div>
+        <div class="time-dots" aria-hidden="true">:</div>
+        <div class="time-card">
+          <span class="time-number" id="hours">00</span>
+          <span class="time-unit">HORAS</span>
+        </div>
+        <div class="time-dots" aria-hidden="true">:</div>
+        <div class="time-card">
+          <span class="time-number" id="minutes">00</span>
+          <span class="time-unit">MIN</span>
+        </div>
+        <div class="time-dots" aria-hidden="true">:</div>
+        <div class="time-card">
+          <span class="time-number" id="seconds">00</span>
+          <span class="time-unit">SEG</span>
+        </div>
+      </div>
+
+      <div class="calendar-action">
+        <button id="btn-add-calendar" class="btn-outline" type="button">
+          <i class="fa-regular fa-calendar-plus"></i> Agendar en mi calendario
+        </button>
+      </div>
+    </section>
+
+    <!-- TARJETAS DE INFORMACIÓN: UBICACIÓN & DRESS CODE -->
+    <section class="section cards-section">
+      <div class="cards-grid">
+        
+        <!-- TARJETA: UBICACIÓN -->
+        <article class="glass-card reveal-on-scroll">
+          <div class="card-icon-badge">
+            <i class="fa-solid fa-location-dot"></i>
+          </div>
+          <h3 class="card-title">¿Dónde es?</h3>
+          <h4 class="card-venue" id="venue-name">Salón Plaza Norte</h4>
+          <p class="card-address" id="venue-address">
+            Acceso Este Km 1003 (Lateral Norte), San Martín, Mendoza
+          </p>
+          <div class="card-extra-info">
+            <i class="fa-regular fa-clock"></i>
+            <span>21:30 hs a 06:00 hs</span>
+          </div>
+          <div class="card-action">
+            <a id="btn-map" href="https://www.google.com/maps/search/?api=1&query=Salon+Plaza+Norte+Acceso+Este+Km+1003+San+Martin+Mendoza" target="_blank" rel="noopener noreferrer" class="btn-card">
+              <i class="fa-solid fa-diamond-turn-right"></i> Cómo Llegar
+            </a>
+          </div>
+        </article>
+
+        <!-- TARJETA: DRESS CODE -->
+        <article class="glass-card reveal-on-scroll">
+          <div class="card-icon-badge">
+            <i class="fa-solid fa-shirt"></i>
+          </div>
+          <h3 class="card-title">Dress Code</h3>
+          <h4 class="card-venue" id="dresscode-title">Elegante Sport</h4>
+          <p class="card-address" id="dresscode-desc">
+            Vení con tu mejor look para bailar y disfrutar toda la noche.
+          </p>
+          <div class="restriction-box">
+            <div class="restriction-badge">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <span>Por favor, <strong>evitar prendas de color dorado</strong></span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SECCIÓN CONFIRMACIÓN DE ASISTENCIA (RSVP) -->
+    <section class="section rsvp-section reveal-on-scroll" id="seccion-rsvp">
+      <div class="rsvp-card">
+        <div class="rsvp-badge">
+          <i class="fa-solid fa-check-double"></i> CONFIRMACIÓN
+        </div>
+        <h2 class="section-title">¿Venís?</h2>
+        <p class="rsvp-desc">
+          Para que la fiesta sea inolvidable necesitamos que confirmes tu asistencia con anticipación en el formulario.
+        </p>
+
+        <div class="rsvp-deadline">
+          <i class="fa-regular fa-calendar-check"></i>
+          <span>Por favor confirmar antes del <strong id="rsvp-deadline-date">2 de Diciembre</strong></span>
+        </div>
+
+        <div class="rsvp-buttons">
+          <a id="btn-rsvp-form" href="https://forms.gle/bySF1sCz3tDbuFkq6" target="_blank" rel="noopener noreferrer" class="btn-primary pulse-btn">
+            <i class="fa-solid fa-clipboard-check"></i> Confirmar en el Formulario
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN PLAYLIST / SPOTIFY -->
+    <section class="section music-suggest-section reveal-on-scroll">
+      <div class="spotify-card">
+        <div class="spotify-header">
+          <div class="spotify-icon">
+            <i class="fa-brands fa-spotify"></i>
+          </div>
+          <div class="spotify-info">
+            <h3 class="spotify-title">Playlist de la Fiesta</h3>
+            <p class="spotify-sub">La música que va a sonar toda la noche</p>
+          </div>
+        </div>
+        <p class="spotify-desc">
+          Escuchá los temazos oficiales de la fiesta en Spotify y andá entrando en clima.
+        </p>
+        <div class="spotify-actions">
+          <a id="btn-spotify" href="https://open.spotify.com/playlist/08P7EMfjTscDO9wlxp53Sa?si=PEeDyLpCTK69TVStK2CTDg&utm_source=copy-link&pi=cV4wyOmqS8CaD" target="_blank" rel="noopener noreferrer" class="btn-spotify">
+            <i class="fa-brands fa-spotify"></i> Abrir en Spotify
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN REGALO / ALIAS -->
+    <section class="section gift-section reveal-on-scroll" id="seccion-regalo">
+      <div class="gift-card">
+        <div class="gift-icon-wrap">
+          <i class="fa-solid fa-gift"></i>
+        </div>
+        <h2 class="section-title">Regalo</h2>
+        <p class="gift-text">
+          Tu presencia es lo más importante para mí. Si deseás hacerme un presente, podés colaborar con mi fondo para festejar mis 18:
+        </p>
+        
+        <div class="alias-card">
+          <span class="alias-pill">ALIAS MERCADO PAGO</span>
+          <div class="alias-content">
+            <div class="alias-data">
+              <span class="alias-label">ALIAS:</span>
+              <span class="alias-value" id="alias-value">alvaro.mp</span>
+            </div>
+            <button id="btn-copy-alias" class="btn-copy" type="button" title="Copiar alias" aria-label="Copiar alias">
+              <i class="fa-regular fa-copy"></i>
+              <span id="copy-btn-text">Copiar</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="copy-toast" class="copy-toast" role="status" aria-live="polite">
+          <i class="fa-solid fa-check"></i> ¡Alias copiado al portapapeles!
+        </div>
+      </div>
+    </section>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="footer-section">
+      <div class="footer-bolt">
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+      <h3 class="footer-title">#ALVARO18</h3>
+      <p class="footer-sub">¡Nos vemos en la pista para romper la noche!</p>
+      <p class="footer-credits">Invitación Digital AUREA</p>
+    </footer>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
